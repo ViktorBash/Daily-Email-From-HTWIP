@@ -1,2 +1,2 @@
-# Daily-Email-From-Notion
-This project is made to send me a summary of my notes in Notion everyday!
+# Email With A Principle From "How To Win Friends and Influence People"
+### This program will send a daily email with a key principle from the book
