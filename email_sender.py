@@ -1,13 +1,9 @@
-"""
-34:15
-"""
-
+import random
 import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from notion.client import NotionClient
-import notion
+
 
 # Get data from notion
 def get_notion_data():
@@ -20,45 +16,42 @@ def get_notion_data():
     -All Goals on main page TODO
     :return:
     """
-    items_from_column = []
+    info_list = [
+        "Don't criticize, condemn or complain.",
+        "Give honest and sincere appreciation",
+        "Arouse in the other person an eager want",
+        "Become genuinely interest in other people",
+        "Smile",
+        "Remember that person's name is the sweetest and most important sound in any language.",
+        "Be a good listener. Encourage others to talk about themselves.",
+        "Talk in terms of the other person's interests.",
+        "Make the other person feel important- and do it sincerely.",
+        "The only way to win an argument is to avoid it.",
+        "Show respect for the other person's opinions. Never say \"You're wrong\".",
+        "If you are wrong, admit it quickly and emphatically.",
+        "Begin in a friendly way.",
+        "Get the other person saying \"Yes, yes\" immediately",
+        "Let the other person do a great deal of the talking.",
+        "LEADERSHIP: Begin with praise and honest appreciation.",
+        "LEADERSHIP: Call attention to people's mistakes indirectly.",
+        "LEADERSHIP: Talk about your own mistakes before criticizing the other person.",
+        "LEADERSHIP: Ask questions instead of giving direct orders.",
+        "LEADERSHIP: Let the other person save face.",
+        "LEADERSHIP: Praise the slightest improvement and praise every improvement. Be hearty in your praise",
+        "LEADERSHIP: Give the other person a fine reputation to live up to",
+        "LEADERSHIP: Use encouragement. Make the fault seem easy to correct",
+        "LEADERSHIP: Make the other person happy about doing the thing you suggest.",
+    ]
 
-    client = NotionClient(
-        token_v2=str(os.environ.get("Notion_Token")))
-    main_page = client.get_block("URL TO MAIN PAGE GOES HERE")
-    for main_page_child in main_page.children:  # Going through the main page (Grindset Mindset)
-        if type(main_page_child) is notion.block.ColumnListBlock:
-            for column_list_child in main_page_child.children:
-                for column_child in column_list_child.children:  # Going through everything in the 2 columns
-                    items_from_column.append(column_child)
-                    if column_child.title == "🧪Things To Learn🧪":
-                        things_to_learn_board = column_child.views[0]
-                        print(dir(things_to_learn_board))
-                        print(dir(things_to_learn_board.collection))
-                        print(things_to_learn_board.collection.get())
+    tip_to_send = random.choice(info_list)
 
-                        # print(things_to_learn_board.get())
-                        # print(things_to_learn_board.group_by)
-                        # print(things_to_learn_board.child_list_key)
-
-
-
-    current_to_do_list = []
-
-    plaintext = f"""
-    Here are your 3 items:
-    Task 1: 
-    Task 2: 
-    Task 3: 
-    """
+    plaintext = f""" """
 
     html = f"""\
            <html>
              <head></head>
              <body>
-             <p style="font-size:18px; font-family:Tahoma, sans-serif;">Here are your 3 items:</p>
-               <h3>Task 1: </h3>
-               <h3>Task 2: </h3>
-               <h3>Task 3: </h3>
+             <p style="font-size:18px; font-family:Tahoma, sans-serif;">{tip_to_send}</p>
              </body>
            </html>
            """
@@ -66,7 +59,7 @@ def get_notion_data():
     return {
         "plaintext": plaintext,
         "html": html,
-        "subject": "🎯 Notion Summary 🎯",
+        "subject": "🎯 How To Win Friends and Influence People - TIP 🎯",
     }
 
 
@@ -91,15 +84,15 @@ def send_email():
     msg.attach(part1)
     msg.attach(part2)
     # Send the message via local SMTP server.
-    # mail = smtplib.SMTP('smtp.gmail.com', 587)
-    #
-    # mail.ehlo()
-    #
-    # mail.starttls()
-    #
-    # mail.login('basharkevichv@gmail.com', str(os.environ.get("Notion_Reminder_Email_Auth")))
-    # mail.sendmail(sender, receiver, msg.as_string())
-    # mail.quit()
+    mail = smtplib.SMTP('smtp.gmail.com', 587)
+
+    mail.ehlo()
+
+    mail.starttls()
+
+    mail.login('basharkevichv@gmail.com', str(os.environ.get("Work_Email_App_Password")))
+    mail.sendmail(sender, receiver, msg.as_string())
+    mail.quit()
 
 
 send_email()
